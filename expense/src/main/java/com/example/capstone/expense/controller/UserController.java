@@ -24,11 +24,11 @@ public class UserController {
         this.userRepository = userRepository;
     }
     
-    // Retrieve all users
-    @GetMapping("/users") 
-    Collection<User> getAllUsers() {
-        return userRepository.findAll();
-    }
+    // // Retrieve all users
+    // @GetMapping("/users") 
+    // Collection<User> getAllUsers() {
+    //     return userRepository.findAll();
+    // }
 
     // Retrieve users by email
     // @GetMapping("/usersByEmail")
