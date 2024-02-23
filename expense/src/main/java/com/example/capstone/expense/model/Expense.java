@@ -3,6 +3,8 @@ package com.example.capstone.expense.model;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -30,7 +32,9 @@ public class Expense {
     private Date expenseDate;
 
     private String category;
-    
+
+    private BigDecimal amount; 
+
     @JsonIgnore // Ignore the bidirectional relationship
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
