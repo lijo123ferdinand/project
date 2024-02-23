@@ -1,5 +1,6 @@
 package com.example.capstone.expense.controller;
 
+import java.math.BigDecimal;
 import java.util.Collection;
 
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,8 @@ public class UserController {
         if (existingUser != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with this email already exists");
         }
+        // Set the balance (initial deposit) to 0 initially
+        newUser.setBalance(BigDecimal.ZERO);
 
         // Save the new user
         userRepository.save(newUser);
