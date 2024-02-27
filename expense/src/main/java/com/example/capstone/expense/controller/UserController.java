@@ -25,18 +25,6 @@ public class UserController {
         this.userRepository = userRepository;
     }
     
-    // // Retrieve all users
-    // @GetMapping("/users") 
-    // Collection<User> getAllUsers() {
-    //     return userRepository.findAll();
-    // }
-
-    // Retrieve users by email
-    // @GetMapping("/usersByEmail")
-    // Collection<User> getUsersByEmail(@RequestParam String email) {
-    //     return userRepository.findByEmail(email);
-    // }
-
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody User newUser) {
         // Check if user with the same email already exists
@@ -44,8 +32,16 @@ public class UserController {
         if (existingUser != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("User with this email already exists");
         }
-        // Set the balance (initial deposit) to 0 initially
-        newUser.setBalance(BigDecimal.ZERO);
+
+        // Set the balance to the user-defined initial balance, if provided
+        BigDecimal balance = newUser.getBalance();
+
+        if (balance != null) {
+            newUser.setBalance(balance);
+        } else {
+            // Set the balance to 0 if not provided
+            newUser.setBalance(BigDecimal.ZERO);
+        }
 
         // Save the new user
         userRepository.save(newUser);
