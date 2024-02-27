@@ -1,15 +1,22 @@
 package com.example.capstone.expense.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.example.capstone.expense.model.Expense;
 import com.example.capstone.expense.model.User;
+import com.example.capstone.expense.repository.ExpenseRepository;
 import com.example.capstone.expense.repository.UserRepository;
 
 @RestController
@@ -17,9 +24,11 @@ import com.example.capstone.expense.repository.UserRepository;
 public class AuthController {
     
     private final UserRepository userRepository;
+    private final ExpenseRepository expenseRepository;
 
-    public AuthController(UserRepository userRepository) {
+    public AuthController(UserRepository userRepository, ExpenseRepository expenseRepository) {
         this.userRepository = userRepository;
+        this.expenseRepository = expenseRepository;
     }
 
     // Admin login endpoint
@@ -33,10 +42,24 @@ public class AuthController {
         }
     }
 
-
     // Retrieve all users
     @GetMapping("/admin/users") 
     Collection<User> getAllUsers() {
         return userRepository.findAll();
+    }
+    
+    //Retrieve expenses by date range
+    @GetMapping("/admin/expensesByDateRange")
+    Collection<Expense> getExpensesByDateRange(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+                                           @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return expenseRepository.findByExpenseDateBetween(startDate, endDate);
+    }
+
+    @GetMapping("/admin/expensesByDate")
+    public Collection<Expense> getExpensesByDate(
+        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expense_date) {
+            
+        // Query expenses for the given date
+        return expenseRepository.findByExpenseDate(expense_date);
     }
 }
