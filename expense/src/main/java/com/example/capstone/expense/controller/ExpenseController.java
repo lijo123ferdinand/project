@@ -3,10 +3,10 @@ package com.example.capstone.expense.controller;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-// import java.sql.Date;
+import java.sql.Date;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Date;
+// import java.util.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.capstone.expense.dto.ExpenseRequest;
 import com.example.capstone.expense.model.Expense;
 import com.example.capstone.expense.model.User;
 import com.example.capstone.expense.repository.ExpenseRepository;
@@ -55,6 +56,7 @@ public class ExpenseController {
 
         // Check if user exists
         if (user == null) {
+            System.out.println("User Not Found!");
             return Collections.emptyList(); // Return empty list if user not found
         }
 
@@ -62,6 +64,44 @@ public class ExpenseController {
         return expenseRepository.findByUserAndExpenseDate(user, expense_date);
     }
 
-    
+    // Add expense to a user  
+    @PostMapping("/user/expenses")
+    public ResponseEntity<String> addExpense(@RequestBody ExpenseRequest expenseRequest) {
+        // Retrieve the user by email
+        User user = userRepository.findByEmail(expenseRequest.getEmail());
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+         // Check if the user has sufficient balance
+        BigDecimal expenseAmount = expenseRequest.getAmount();
+        BigDecimal currentBalance = user.getBalance();
+        if (currentBalance.compareTo(expenseAmount) < 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Insufficient balance");
+        }
+
+        // Update the user's balance
+        BigDecimal newBalance = currentBalance.subtract(expenseAmount);
+        user.setBalance(newBalance);
+
+        // Create a new Expense object
+        Expense newExpense = new Expense();
+        newExpense.setUser(user);
+        newExpense.setCategory(expenseRequest.getCategory());
+        newExpense.setAmount(expenseRequest.getAmount());
+
+        // Convert LocalDate to Date
+        Date expenseDate = Date.valueOf(LocalDate.now());
+        newExpense.setExpenseDate(expenseDate);
+
+        // Save the new expense
+        expenseRepository.save(newExpense);
+
+         // Save the updated user balance
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Expense added successfully");
+    }
+
 
 }
