@@ -74,5 +74,24 @@ public class UserController {
         // Authentication successful
         return ResponseEntity.ok("Login successful");
     }
+    @PostMapping("/user/addSalary")
+    public ResponseEntity<String> addSalary(@RequestParam String email, @RequestParam BigDecimal amount) {
+        // Retrieve the user by email
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        // Add the salary to the user's balance
+        BigDecimal currentBalance = user.getBalance();
+        BigDecimal newBalance = currentBalance.add(amount);
+        user.setBalance(newBalance);
+
+        // Save the updated user balance
+        userRepository.save(user);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Salary added successfully");
+    }
+
 
 }
