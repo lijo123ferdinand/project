@@ -120,5 +120,14 @@ public class ExpenseController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Expense added successfully");
     }
 
+    //Retrieve expenses of a user by DateRange
+    @GetMapping("/user/expensesByDateRange")
+    Collection<Expense> getExpensesByDateRange(
+            @RequestParam String email,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        return expenseRepository.findByUserEmailAndExpenseDateBetween(email, startDate, endDate);
+    }
+    
 
 }
