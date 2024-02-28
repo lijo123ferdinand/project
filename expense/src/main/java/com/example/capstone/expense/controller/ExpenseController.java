@@ -46,10 +46,27 @@ public class ExpenseController {
         return expenseRepository.findByUserEmail(email);
     }
 
+    // @GetMapping("/user/expensesByDate")
+    // public Collection<Expense> getExpensesByEmailAndDate(
+    //     @RequestParam String email,
+    //     @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expense_date) {
+
+    //     // Find the user by email
+    //     User user = userRepository.findByEmail(email);
+
+    //     // Check if user exists
+    //     if (user == null) {
+    //         System.out.println("User Not Found!");
+    //         return Collections.emptyList(); // Return empty list if user not found
+    //     }
+
+    //     // Query expenses based on user and date
+    //     return expenseRepository.findByUserAndExpenseDate(user, expense_date);
+    // }
     @GetMapping("/user/expensesByDate")
     public Collection<Expense> getExpensesByEmailAndDate(
-        @RequestParam String email,
-        @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime expense_date) {
+            @RequestParam String email,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime expense_date) {
 
         // Find the user by email
         User user = userRepository.findByEmail(email);

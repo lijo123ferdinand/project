@@ -19,5 +19,9 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long> {
     Collection<Expense> findByExpenseDate(LocalDateTime expense_date);
 
     Collection<Expense> findByUserAndExpenseDate(User user, LocalDateTime expense_date);
+
+    // Collection<Expense> findByUserAndExpenseDate(User user, LocalDateTime expense_date);
+
+    // Collection<Expense> findByUserAndExpenseDate(User user, LocalDate expense_date);
 		
 }

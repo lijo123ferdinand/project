@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.capstone.expense.model.User;
 import com.example.capstone.expense.repository.UserRepository;
+import com.example.capstone.expense.security.PasswordHashing;
 
 @RestController
 @RequestMapping("/api")
@@ -42,6 +43,10 @@ public class UserController {
             // Set the balance to 0 if not provided
             newUser.setBalance(BigDecimal.ZERO);
         }
+            // Hash the user's password
+        String hashedPassword = PasswordHashing.hashPassword(newUser.getPassword());
+        newUser.setPassword(hashedPassword);
+
 
         // Save the new user
         userRepository.save(newUser);
@@ -58,7 +63,11 @@ public class UserController {
         }
 
         // Verify the password
-        if (!existingUser.getPassword().equals(loginUser.getPassword())) {
+        // if (!existingUser.getPassword().equals(loginUser.getPassword())) {
+        //     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
+        // }
+            // Verify the password
+        if (!PasswordHashing.verifyPassword(loginUser.getPassword(), existingUser.getPassword())) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password");
         }
 
