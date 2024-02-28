@@ -121,6 +121,13 @@ public class ExpenseController {
     }
 
     //Retrieve expenses of a user by DateRange
+    // @GetMapping("/user/expensesByDateRange")
+    // Collection<Expense> getExpensesByDateRange(
+    //         @RequestParam String email,
+    //         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+    //         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+    //     return expenseRepository.findByUserEmailAndExpenseDateBetween(email, startDate, endDate);
+    // }
     @GetMapping("/user/expensesByDateRange")
     Collection<Expense> getExpensesByDateRange(
             @RequestParam String email,
@@ -128,6 +135,6 @@ public class ExpenseController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         return expenseRepository.findByUserEmailAndExpenseDateBetween(email, startDate, endDate);
     }
-    
+
 
 }
