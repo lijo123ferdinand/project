@@ -132,6 +132,15 @@ public ResponseEntity<String> resetPassword(@RequestParam String email, @Request
     
     return ResponseEntity.status(HttpStatus.OK).body("Password reset successfully");
 }
+@GetMapping("/user/info")
+public ResponseEntity<User> getUserInfo(@RequestParam String email) {
+    User user = userRepository.findByEmail(email);
+    if (user == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+    
+    return ResponseEntity.status(HttpStatus.OK).body(user);
+}
 
 
 
