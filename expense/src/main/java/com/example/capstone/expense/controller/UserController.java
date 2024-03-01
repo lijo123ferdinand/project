@@ -92,6 +92,20 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body("Salary added successfully");
     }
+    @GetMapping("/user/getBalance")
+public ResponseEntity<BigDecimal> getBalance(@RequestParam String email) {
+    // Retrieve the user by email
+    User user = userRepository.findByEmail(email);
+    if (user == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+    }
+
+    // Get the balance of the user
+    BigDecimal balance = user.getBalance();
+
+    return ResponseEntity.status(HttpStatus.OK).body(balance);
+}
+
 
 
 }
