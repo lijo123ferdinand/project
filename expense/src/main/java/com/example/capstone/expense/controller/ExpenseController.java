@@ -191,6 +191,22 @@ public class ExpenseController {
             }
             return expensesByCategory;
         }
+            @GetMapping("/user/totalExpenses")
+        public ResponseEntity<BigDecimal> getTotalExpenses(@RequestParam String email) {
+        User user = userRepository.findByEmail(email);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+        }
+        
+        Collection<Expense> expenses = expenseRepository.findByUser(user);
+        BigDecimal totalExpenses = expenses.stream()
+                                        .map(Expense::getAmount)
+                                        .reduce(BigDecimal.ZERO, BigDecimal::add);
+        
+        return ResponseEntity.status(HttpStatus.OK).body(totalExpenses);
+    }
+    
+
 
 
 }

@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -105,6 +106,33 @@ public ResponseEntity<BigDecimal> getBalance(@RequestParam String email) {
 
     return ResponseEntity.status(HttpStatus.OK).body(balance);
 }
+@DeleteMapping("/user/delete")
+public ResponseEntity<String> deleteUser(@RequestParam String email) {
+    User user = userRepository.findByEmail(email);
+    if (user == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+    }
+    
+    userRepository.delete(user);
+    
+    return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
+
+}
+@PostMapping("/user/resetPassword")
+public ResponseEntity<String> resetPassword(@RequestParam String email, @RequestParam String newPassword) {
+    User user = userRepository.findByEmail(email);
+    if (user == null) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+    }
+    
+    // Update user's password
+    String hashedPassword = PasswordHashing.hashPassword(newPassword);
+    user.setPassword(hashedPassword);
+    userRepository.save(user);
+    
+    return ResponseEntity.status(HttpStatus.OK).body("Password reset successfully");
+}
+
 
 
 
