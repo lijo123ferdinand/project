@@ -6,6 +6,9 @@ import java.time.LocalDateTime;
 import java.sql.Date;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 // import java.util.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
@@ -135,6 +138,59 @@ public class ExpenseController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
         return expenseRepository.findByUserEmailAndExpenseDateBetween(email, startDate, endDate);
     }
+    @GetMapping("/user/expensesByEachCategory")
+    public Collection<Expense> getExpensesByCategory(
+            @RequestParam String email,
+            @RequestParam String category) {
+        // Retrieve expenses for the given user and category
+        return expenseRepository.findByUserEmailAndCategory(email, category);
+    }
+    @GetMapping("/user/totalExpenseByCategoryAndDateRange")
+    public Map<String, BigDecimal> getTotalExpenseByCategoryAndDateRange(
+            @RequestParam String email,
+            @RequestParam String category,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endDate) {
+        // Retrieve expenses for the given user, category, and date range
+        Collection<Expense> expenses = expenseRepository.findByUserEmailAndCategoryAndExpenseDateBetween(email, category, startDate, endDate);
+ 
+        // Calculate total expense for the category
+        BigDecimal totalExpense = expenses.stream()
+                .map(Expense::getAmount)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+ 
+        // Create a map to hold the result
+        Map<String, BigDecimal> result = new HashMap<>();
+        result.put(category, totalExpense);
+ 
+        return result;
+    }
+ 
+    
+    @GetMapping("/user/expensesByCategory")
+        public Map<String, BigDecimal> getExpensesByCategory(@RequestParam String email) {
+            // Find the user by email
+            User user = userRepository.findByEmail(email);
+            // Check if user exists
+            if (user == null) {
+                System.out.println("User Not Found!");
+                return Collections.emptyMap(); // Return empty map if user not found
+            }
+            // Fetch all expenses for the user
+            List<Expense> userExpenses = expenseRepository.findByUser(user);
+            // Map to store category-wise expenses
+            Map<String, BigDecimal> expensesByCategory = new HashMap<>();
+            // Calculate total expenses for each category
+            for (Expense expense : userExpenses) {
+                String category = expense.getCategory();
+                BigDecimal amount = expense.getAmount();
+                // Get the current total for the category or zero if not present
+                BigDecimal currentTotal = expensesByCategory.getOrDefault(category, BigDecimal.ZERO);
+                // Add the current expense amount to the total
+                expensesByCategory.put(category, currentTotal.add(amount));
+            }
+            return expensesByCategory;
+        }
 
 
 }
