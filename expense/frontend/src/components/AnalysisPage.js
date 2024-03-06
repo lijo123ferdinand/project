@@ -1,16 +1,18 @@
-// Analysis.js
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './form.css'; // Import the CSS file
+import { useLocation } from 'react-router-dom';
+import './AnalysisPage.css';
 
-const Analysis = () => {
+const AnalysisPage = ({ loggedInUser }) => {
   const [expenses, setExpenses] = useState([]);
+  const [startDate, setStartDate] = useState(new Date(1970, 0, 1).toISOString().slice(0, 10)); // Start date set to 1970-01-01
+  const [endDate, setEndDate] = useState(new Date().toISOString().slice(0, 10)); // End date set to today
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchExpenses = async () => {
       try {
-        const response = await axios.get('http://localhost:8086/api/expenses');
+        const response = await axios.get(`http://localhost:8086/api/user/expensesByDateRange?email=${loggedInUser}&startDate=${startDate}&endDate=${endDate}`);
         setExpenses(response.data);
         setError('');
       } catch (error) {
@@ -20,33 +22,70 @@ const Analysis = () => {
       }
     };
 
-    fetchExpenses();
-  }, []);
+    if (loggedInUser) {
+      fetchExpenses();
+    }
+  }, [loggedInUser, startDate, endDate]);
+
+  const handleDateRangeSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      // Set start date to beginning of the day and end date to end of the day
+      const formattedStartDate = new Date(startDate).toISOString();
+      const formattedEndDate = new Date(endDate).toISOString();
+  
+      const response = await axios.get(`http://localhost:8086/api/user/expensesByDateRange?email=${loggedInUser}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`);
+      setExpenses(response.data);
+      setError('');
+    } catch (error) {
+      setExpenses([]);
+      setError('Error fetching expenses for the specified date range');
+      console.error('Date range fetch error:', error);
+    }
+  };
 
   return (
-    <div className="form-container">
-      <h2 className="form-title">Analysis</h2>
+    <div className="analysis-container">
+      <h2 className="analysis-title">Expense Analysis</h2>
+      <form onSubmit={handleDateRangeSubmit} className="date-range-form">
+        <div className="form-group">
+          <label htmlFor="startDate">Start Date:</label>
+          <input
+            type="date"
+            id="startDate"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            required
+            className="form-control"
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="endDate">End Date:</label>
+          <input
+            type="date"
+            id="endDate"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            required
+            className="form-control"
+          />
+        </div>
+        <button type="submit" className="btn btn-primary">Get Expenses</button>
+      </form>
       {error && <div className="error-message">{error}</div>}
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Category</th>
-            <th>Amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          {expenses.map((expense) => (
-            <tr key={expense.id}>
-              <td>{expense.date}</td>
-              <td>{expense.category}</td>
-              <td>{expense.amount}</td>
-            </tr>
+      <div className="expense-list">
+        <h3>Expenses:</h3>
+        <ul>
+          {expenses.map((expense, index) => (
+            <li key={index} className="expense-item">
+              <p><span className="label">Category:</span> {expense.category}</p>
+              <p><span className="label">Amount:</span> {expense.amount}</p>
+              <p><span className="label">Date:</span> {expense.date}</p>
+            </li>
           ))}
-        </tbody>
-      </table>
+        </ul>
+      </div>
     </div>
   );
 };
-
-export default Analysis;
+export default AnalysisPage;

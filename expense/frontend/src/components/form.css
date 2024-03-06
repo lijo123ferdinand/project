@@ -32,4 +32,28 @@
     color: red;
     margin-top: 10px;
   }
+  .login-button {
+    background-color: #007bff; /* Blue background color */
+    color: #fff; /* White text color */
+    border: none; /* Remove border */
+    padding: 10px 20px; /* Add padding */
+    cursor: pointer; /* Add cursor on hover */
+  }
+  
+  .login-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  .signup-text {
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .signup-link {
+    color: blue;
+    text-decoration: none;
+  }
+  
+  .signup-link:hover {
+    text-decoration: underline;
+  }
   

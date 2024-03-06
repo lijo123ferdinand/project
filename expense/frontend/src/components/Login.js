@@ -1,4 +1,3 @@
-// Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -18,11 +17,15 @@ const Login = () => {
         password
       });
       console.log(response.data);
-      navigate('/dashboard', { state: { userEmail: email } });
+      navigate('/dashboard', { state: { userEmail: email } }); // Redirect to dashboard with user's email
     } catch (error) {
       setError('Invalid email or password');
       console.error('Login error:', error);
     }
+  };
+
+  const handleSignupClick = () => {
+    navigate('/signup');
   };
 
   return (
@@ -48,6 +51,7 @@ const Login = () => {
         {error && <div className="error-message">{error}</div>}
         <button className="form-button" type="submit">Login</button>
       </form>
+      <p>Don't have an account? <span onClick={handleSignupClick} className="signup-link">Signup</span></p>
     </div>
   );
 };
