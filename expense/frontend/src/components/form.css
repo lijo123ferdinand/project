@@ -1,0 +1,35 @@
+/* form.css */
+
+.form-container {
+    text-align: center;
+    margin: 50px auto;
+    max-width: 400px;
+  }
+  
+  .form-title {
+    margin-bottom: 20px;
+  }
+  
+  .form-input {
+    margin-bottom: 10px;
+    padding: 8px;
+    width: 100%;
+    box-sizing: border-box;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+  
+  .form-button {
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
