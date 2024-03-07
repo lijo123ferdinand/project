@@ -207,35 +207,6 @@ public class ExpenseController {
         
         return ResponseEntity.status(HttpStatus.OK).body(totalExpenses);
     }
-    @GetMapping("/user/expenses/analysis")
-public ResponseEntity<String> getUserExpensesAnalysis(@RequestParam String email) {
-    // Retrieve all expenses for the user
-    List<Expense> allUserExpenses = expenseRepository.findByEmail(email);
- 
-    // Calculate total amount spent by the user
-    BigDecimal totalAmountSpentByUser = allUserExpenses.stream()
-            .map(Expense::getAmount)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
- 
-    // Calculate total amount spent across all categories
-    List<Expense> allExpenses = expenseRepository.findAll();
-    BigDecimal totalAmountSpentAcrossAllCategories = allExpenses.stream()
-            .map(Expense::getAmount)
-            .reduce(BigDecimal.ZERO, BigDecimal::add);
- 
-    // Calculate percentage spent across all categories by the user
-    BigDecimal percentageSpentAcrossAllCategories = BigDecimal.ZERO;
-    if (totalAmountSpentAcrossAllCategories.compareTo(BigDecimal.ZERO) > 0) {
-        percentageSpentAcrossAllCategories = totalAmountSpentByUser
-                .divide(totalAmountSpentAcrossAllCategories, 4, RoundingMode.HALF_UP)
-                .multiply(BigDecimal.valueOf(100));
-    }
- 
-    // Create a response message
-    String responseMessage = String.format("Total percentage spent across all categories by user %s: %s%%",
-                                           email, percentageSpentAcrossAllCategories);
- 
-    return ResponseEntity.status(HttpStatus.OK).body(responseMessage);
-}
+    
    
 }
