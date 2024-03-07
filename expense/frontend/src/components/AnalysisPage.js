@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useLocation } from 'react-router-dom';
+// import { useLocation } from 'react-router-dom';
 import './AnalysisPage.css';
 
 const AnalysisPage = ({ loggedInUser }) => {

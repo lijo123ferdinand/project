@@ -1,67 +1,104 @@
 /* dashboard.css */
 
 .dashboard-container {
-    max-width: 400px;
-    margin: 0 auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dashboard-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  .form-container {
-    margin-bottom: 20px;
-  }
-  
-  .form-label {
-    display: block;
-    margin-bottom: 5px;
-  }
-  
-  .form-input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .submit-button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .submit-button:hover {
-    background-color: #0056b3;
-  }
-  
-  .error-message {
-    color: red;
-    margin-top: 10px;
-  }
-  
-  .user-info-container {
-    margin-top: 20px;
-  }
-  
-  .user-info {
-    margin-bottom: 10px;
-  }
-  
-  .user-info-label {
-    font-weight: bold;
-  }
-  
-  .user-info-value {
-    margin-left: 10px;
-  }
-  
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-title {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.error-message {
+  color: #ff0000;
+  margin-top: 10px;
+}
+
+.balance {
+  font-weight: bold;
+}
+
+.expenses-list {
+  margin-top: 20px;
+}
+
+.expense-item {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+.label {
+  font-weight: bold;
+  color: #333;
+}
+
+.salary-form {
+  margin-top: 20px;
+}
+
+.salary-form input[type="number"] {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.salary-form button {
+  margin-left: 10px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.salary-form button:hover {
+  background-color: #0056b3;
+}
+
+.delete-user-button {
+  margin-top: 20px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background-color: #dc3545;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-user-button:hover {
+  background-color: #c82333;
+}
+
+.expense-form {
+  margin-bottom: 20px; /* Add margin to separate expense form */
+}
+
+.expense-form input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.expense-form button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.expense-form button:hover {
+  background-color: #0056b3;
+}
