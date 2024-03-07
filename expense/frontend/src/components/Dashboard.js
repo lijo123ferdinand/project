@@ -40,6 +40,7 @@ const Dashboard = () => {
       fetchData();
     }
   }, [userEmail]);
+  
 
   const handleAddSalary = async () => {
     try {
@@ -66,12 +67,19 @@ const Dashboard = () => {
       // Refresh expenses after adding expense
       const expensesResponse = await axios.get(`http://localhost:8086/api/expensesByEmail?email=${userEmail}`);
       setExpenses(expensesResponse.data);
+      
+      // Deduct the expense amount from the balance
+      const updatedBalance = balance - parseFloat(expenseAmount);
+      setBalance(updatedBalance.toFixed(2)); // Assuming balance is a float value
+      
       setCategory('');
       setExpenseAmount('');
     } catch (error) {
       console.error('Error adding expense:', error);
     }
   };
+  
+  
 
   const handleDeleteUser = async () => {
     try {

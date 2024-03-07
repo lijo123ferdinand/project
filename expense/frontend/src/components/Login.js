@@ -19,7 +19,7 @@ const Login = () => {
       console.log(response.data);
       navigate('/dashboard', { state: { userEmail: email } }); // Redirect to dashboard with user's email
     } catch (error) {
-      setError('Invalid email or password');
+      setError('Invalid email or password. Please try again.');
       console.error('Login error:', error);
     }
   };
@@ -32,18 +32,22 @@ const Login = () => {
     <div className="form-container">
       <h2 className="form-title">Login</h2>
       <form onSubmit={handleSubmit}>
+        <label htmlFor="email">Email</label>
         <input
+          id="email"
           className="form-input"
           type="email"
-          placeholder="Email"
+          placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           required
         />
+        <label htmlFor="password">Password</label>
         <input
+          id="password"
           className="form-input"
           type="password"
-          placeholder="Password"
+          placeholder="Enter your password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
