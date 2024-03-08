@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './form.css'; // Import the CSS file
+import { Link } from 'react-router-dom'; 
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -17,7 +18,9 @@ const Login = () => {
         password
       });
       console.log(response.data);
+      localStorage.setItem('userEmail', email);   
       navigate('/dashboard', { state: { userEmail: email } }); // Redirect to dashboard with user's email
+      return <Link to={{ pathname: '/analysis', state: { userEmail: email } }} />
     } catch (error) {
       setError('Invalid email or password');
       console.error('Login error:', error);

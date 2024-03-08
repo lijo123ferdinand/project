@@ -8,8 +8,10 @@ const AnalysisPage = ({ loggedInUser }) => {
   const [startDate, setStartDate] = useState(new Date(1970, 0, 1).toISOString().slice(0, 10)); // Start date set to 1970-01-01
   const [endDate, setEndDate] = useState(new Date().toISOString().slice(0, 10)); // End date set to today
   const [error, setError] = useState('');
+  
 
   useEffect(() => {
+    const loggedInUser = localStorage.getItem('userEmail');
     const fetchExpenses = async () => {
       try {
         const response = await axios.get(`http://localhost:8086/api/user/expensesByDateRange?email=${loggedInUser}&startDate=${startDate}&endDate=${endDate}`);
@@ -34,6 +36,7 @@ const AnalysisPage = ({ loggedInUser }) => {
       // Set start date to beginning of the day and end date to end of the day
       const formattedStartDate = new Date(startDate).toISOString();
       const formattedEndDate = new Date(endDate).toISOString();
+      const loggedInUser = localStorage.getItem('userEmail');
   
       const response = await axios.get(`http://localhost:8086/api/user/expensesByDateRange?email=${loggedInUser}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`);
       setExpenses(response.data);
@@ -48,6 +51,12 @@ const AnalysisPage = ({ loggedInUser }) => {
 
   const renderChart = (expensesData) => {
     const ctx = document.getElementById('expensesChart');
+  
+    // Check if a chart instance exists for the canvas
+    if (ctx.chart) {
+      ctx.chart.destroy(); // Destroy the existing chart instance
+    }
+  
     const categories = {};
     expensesData.forEach(expense => {
       if (categories[expense.category]) {
@@ -56,10 +65,10 @@ const AnalysisPage = ({ loggedInUser }) => {
         categories[expense.category] = parseFloat(expense.amount);
       }
     });
-
+  
     const labels = Object.keys(categories);
     const data = Object.values(categories);
-
+  
     new Chart(ctx, {
       type: 'pie',
       data: {
@@ -83,6 +92,7 @@ const AnalysisPage = ({ loggedInUser }) => {
       }
     });
   };
+  
 
   return (
     <div className="analysis-container">

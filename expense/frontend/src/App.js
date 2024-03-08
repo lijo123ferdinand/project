@@ -14,11 +14,14 @@ const App = () => {
       <div>
         <Navbar />
         <Routes>
+          
           <Route path="/login" element={<LoginPage setLoggedInUser={setLoggedInUser} />} />
           <Route path="/signup" element={<SignupPage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/analysis" element={<AnalysisPage loggedInUser={loggedInUser} />} /> 
           <Route path="/" element={<Navigate to="/login" />} />
+          <Route exact path="/dashboard" render={(props) => <DashboardPage {...props} loggedInUser={props.location.state.userEmail} />} />
+          <Route exact path="/analysis" render={(props) => <AnalysisPage {...props} loggedInUser={props.location.state.userEmail} />} />
         </Routes>
       </div>
     </Router>
