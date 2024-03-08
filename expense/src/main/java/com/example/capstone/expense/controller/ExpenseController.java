@@ -17,6 +17,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,6 +44,30 @@ public class ExpenseController {
     public ExpenseController(UserRepository userRepository, ExpenseRepository expenseRepository) {
         this.userRepository = userRepository;
         this.expenseRepository = expenseRepository;
+    }
+     // Delete expense by ID
+    @DeleteMapping("/user/expenses/{id}")
+    public ResponseEntity<String> deleteExpenseById(@PathVariable Long id) {
+        // Check if the expense exists
+        Expense expense = expenseRepository.findById(id).orElse(null);
+        if (expense == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Expense not found");
+        }
+
+        // Retrieve the associated user
+        User user = expense.getUser();
+
+        // Update the user's balance by adding back the expense amount
+        BigDecimal currentBalance = user.getBalance();
+        BigDecimal expenseAmount = expense.getAmount();
+        BigDecimal newBalance = currentBalance.add(expenseAmount);
+        user.setBalance(newBalance);
+        userRepository.save(user);
+
+        // Delete the expense
+        expenseRepository.delete(expense);
+
+        return ResponseEntity.status(HttpStatus.OK).body("Expense deleted successfully");
     }
 
     // Retrieve expenses by user email

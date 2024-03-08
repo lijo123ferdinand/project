@@ -9,21 +9,21 @@ const AnalysisPage = ({ loggedInUser }) => {
   const [endDate, setEndDate] = useState(new Date().toISOString().slice(0, 10)); // End date set to today
   const [error, setError] = useState('');
   
-
   useEffect(() => {
     const loggedInUser = localStorage.getItem('userEmail');
-    const fetchExpenses = async () => {
-      try {
-        const response = await axios.get(`http://localhost:8086/api/user/expensesByDateRange?email=${loggedInUser}&startDate=${startDate}&endDate=${endDate}`);
-        setExpenses(response.data);
-        setError('');
-        renderChart(response.data); // Render chart with fetched expenses
-      } catch (error) {
-        setExpenses([]);
-        setError('Error fetching expenses');
-        console.error('Expenses fetch error:', error);
-      }
-    };
+     const fetchExpenses = async () => {
+    try {
+      const response = await axios.get(`http://localhost:8086/api/user/expensesByDateRange?email=${loggedInUser}&startDate=${startDate}&endDate=${endDate}`);
+      setExpenses(response.data);
+      setError('');
+      renderChart(response.data); // Render chart with fetched expenses
+    } catch (error) {
+      setExpenses([]);
+      setError('Error fetching expenses');
+      console.error('Expenses fetch error:', error);
+    }
+  };
+
 
     if (loggedInUser) {
       fetchExpenses();
@@ -46,6 +46,18 @@ const AnalysisPage = ({ loggedInUser }) => {
       setExpenses([]);
       setError('Error fetching expenses for the specified date range');
       console.error('Date range fetch error:', error);
+    }
+  };
+
+  const handleDeleteExpense = async (expenseId) => {
+    try {
+      await axios.delete(`http://localhost:8086/api/user/expenses/${expenseId}`);
+      // After deleting the expense, refetch the expenses
+      // fetchExpenses();
+      setExpenses();
+    } catch (error) {
+      setError('Error deleting expense');
+      console.error('Expense deletion error:', error);
     }
   };
 
@@ -131,6 +143,7 @@ const AnalysisPage = ({ loggedInUser }) => {
               <p><span className="label">Category:</span> {expense.category}</p>
               <p><span className="label">Amount:</span> {expense.amount}</p>
               <p><span className="label">Date:</span> {expense.date}</p>
+              <button onClick={() => handleDeleteExpense(expense.id)}>Delete</button>
             </li>
           ))}
         </ul>
