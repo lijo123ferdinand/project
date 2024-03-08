@@ -1,5 +1,5 @@
-// Signup.js
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 
 const Signup = () => {
   const [username, setUsername] = useState('');
@@ -69,6 +69,9 @@ const Signup = () => {
         <button className="form-button" type="submit">Signup</button>
         {error && <div className="error-message">{error}</div>}
       </form>
+      <div>
+        Already have an account? <Link to="/login">Login</Link> {/* Link to the login page */}
+      </div>
     </div>
   );
 };

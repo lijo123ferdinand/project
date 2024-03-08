@@ -1,104 +1,94 @@
-/* dashboard.css */
-
-.dashboard-container {
-  max-width: 600px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.dashboard-content {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap to the next line */
 }
 
-.dashboard-title {
-  text-align: center;
-  margin-bottom: 20px;
+.user-info,
+.dashboard-actions {
+  flex: 1; /* Equal width for both sections */
+  min-width: 300px; /* Set a minimum width for better layout */
+  display: flex;
+  flex-direction: column; /* Align components vertically */
+  align-items: flex-start; /* Align components to the left */
+  margin-right: 20px; /* Add some space between sections */
+  margin-left: auto; /* Move elements to the right */
 }
 
-.error-message {
-  color: #ff0000;
-  margin-top: 10px;
+.dashboard-actions {
+  display: flex;
+  flex-direction: column; /* Align components vertically */
+  align-items: flex-start; /* Align components to the left */
+  margin-right: 40px; /* Add some space between sections */
 }
 
-.balance {
-  font-weight: bold;
+.expense-form,
+.salary-form {
+  margin-bottom: 30px; /* Add margin between forms */
 }
 
 .expenses-list {
-  margin-top: 20px;
+  flex: 1; /* Allow expenses list to take remaining space */
+  min-width: 300px; /* Set a minimum width for better layout */
+  margin-left: 20px; /* Add some space between sections */
 }
 
-.expense-item {
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #fff;
+.expense-form input,
+.salary-form input {
+  width: calc(100% - 24px);
+  padding: 16px;
+  margin-bottom: 20px;
+  border: 2px solid #cccccc;
+  border-radius: 8px;
+  font-size: 16px;
 }
 
-.label {
-  font-weight: bold;
-  color: #333;
-}
-
-.salary-form {
-  margin-top: 20px;
-}
-
-.salary-form input[type="number"] {
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-}
-
+.expense-form button,
 .salary-form button {
-  margin-left: 10px;
-  padding: 8px 16px;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: #fff;
+  background-color: #2196f3;
+  color: #ffffff;
+  padding: 16px 32px;
   border: none;
+  border-radius: 8px;
   cursor: pointer;
+  font-size: 16px;
 }
 
+.expense-form button:hover,
 .salary-form button:hover {
-  background-color: #0056b3;
+  background-color: #1e87dc;
 }
+.delete-user-button,
+.sign-out-button {
 
-.delete-user-button {
-  margin-top: 20px;
-  padding: 8px 16px;
-  border-radius: 4px;
-  background-color: #dc3545;
-  color: #fff;
+  margin-top: 30px;
+  padding: 12px 24px;
+  margin-left: auto; 
+  border-radius: 8px;
+  background-color: #f44336;
+  color: #ffffff;
   border: none;
   cursor: pointer;
+  font-size: 16px;
 }
 
-.delete-user-button:hover {
-  background-color: #c82333;
+.delete-user-button:hover,
+.sign-out-button:hover {
+  background-color: #d32f2f;
 }
-
-.expense-form {
-  margin-bottom: 20px; /* Add margin to separate expense form */
-}
-
-.expense-form input {
+.expense-table {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
+  border-collapse: collapse;
+  background-color: #f5f5f5; /* Background color for the table */
 }
 
-.expense-form button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.expense-table th,
+.expense-table td {
+  padding: 8px;
+  border: 1px solid #dddddd;
+  text-align: left;
 }
 
-.expense-form button:hover {
-  background-color: #0056b3;
+.expense-table th {
+  background-color: #eeeeee;
+  font-weight: bold;
 }

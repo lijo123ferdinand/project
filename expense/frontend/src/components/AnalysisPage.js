@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-// import { useLocation } from 'react-router-dom';
+import Chart from 'chart.js/auto';
 import './AnalysisPage.css';
 
 const AnalysisPage = ({ loggedInUser }) => {
@@ -15,6 +15,7 @@ const AnalysisPage = ({ loggedInUser }) => {
         const response = await axios.get(`http://localhost:8086/api/user/expensesByDateRange?email=${loggedInUser}&startDate=${startDate}&endDate=${endDate}`);
         setExpenses(response.data);
         setError('');
+        renderChart(response.data); // Render chart with fetched expenses
       } catch (error) {
         setExpenses([]);
         setError('Error fetching expenses');
@@ -37,11 +38,50 @@ const AnalysisPage = ({ loggedInUser }) => {
       const response = await axios.get(`http://localhost:8086/api/user/expensesByDateRange?email=${loggedInUser}&startDate=${formattedStartDate}&endDate=${formattedEndDate}`);
       setExpenses(response.data);
       setError('');
+      renderChart(response.data); // Render chart with fetched expenses
     } catch (error) {
       setExpenses([]);
       setError('Error fetching expenses for the specified date range');
       console.error('Date range fetch error:', error);
     }
+  };
+
+  const renderChart = (expensesData) => {
+    const ctx = document.getElementById('expensesChart');
+    const categories = {};
+    expensesData.forEach(expense => {
+      if (categories[expense.category]) {
+        categories[expense.category] += parseFloat(expense.amount);
+      } else {
+        categories[expense.category] = parseFloat(expense.amount);
+      }
+    });
+
+    const labels = Object.keys(categories);
+    const data = Object.values(categories);
+
+    new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels,
+        datasets: [{
+          label: 'Expenses',
+          data,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.6)',
+            'rgba(54, 162, 235, 0.6)',
+            'rgba(255, 206, 86, 0.6)',
+            'rgba(75, 192, 192, 0.6)',
+            'rgba(153, 102, 255, 0.6)',
+            'rgba(255, 159, 64, 0.6)'
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false
+      }
+    });
   };
 
   return (
@@ -84,6 +124,9 @@ const AnalysisPage = ({ loggedInUser }) => {
             </li>
           ))}
         </ul>
+      </div>
+      <div className="chart-container">
+        <canvas id="expensesChart" width="400" height="400"></canvas>
       </div>
     </div>
   );
