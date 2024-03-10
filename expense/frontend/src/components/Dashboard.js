@@ -52,38 +52,6 @@ const formatDate = (dateString) => {
   return date instanceof Date && !isNaN(date) ? `${date.toLocaleDateString()} ${date.toLocaleTimeString()}` : dateString;
 };
 
-// ExpenseForm component
-const ExpenseForm = ({ category, expenseAmount, handleCategoryChange, handleAmountChange, handleAddExpense }) => (
-  <div className="expense-form">
-    <input
-      type="text"
-      placeholder="Expense Category"
-      value={category}
-      onChange={handleCategoryChange}
-    />
-    <input
-      type="number"
-      placeholder="Expense Amount"
-      value={expenseAmount}
-      onChange={handleAmountChange}
-    />
-    <button onClick={handleAddExpense}>Add Expense</button>
-  </div>
-);
-
-// SalaryForm component
-const SalaryForm = ({ salary, handleSalaryChange, handleAddSalary }) => (
-  <div className="salary-form">
-    <input
-      type="number"
-      placeholder="Enter Salary"
-      value={salary}
-      onChange={handleSalaryChange}
-    />
-    <button onClick={handleAddSalary}>Add Salary</button>
-  </div>
-);
-
 // DeleteUserButton component
 const DeleteUserButton = ({ handleDeleteUser }) => (
   <button onClick={handleDeleteUser} className="delete-user-button">Delete User</button>
